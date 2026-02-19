@@ -1,0 +1,235 @@
+title: OpenClaw on OCI
+
+description: Deploy OpenClaw on Oracle Cloud Infrastructure with Podman-first runtime, private networking, and optional OCI Bastion + IAM integration.
+
+schemaVersion: 1.1.0
+version: "20260219"
+locale: en
+
+variableGroups:
+  - title: Hidden
+    visible: false
+    variables:
+      - tenancy_ocid
+      - region
+
+  - title: Core
+    variables:
+      - compartment_ocid
+      - ssh_public_key
+      - stack_prefix
+      - availability_domain_number
+      - image_ocid
+      - instance_shape
+      - instance_ocpus
+      - instance_memory_in_gbs
+      - boot_volume_size_gbs
+
+  - title: Networking
+    variables:
+      - vcn_cidr_block
+      - public_subnet_cidr_block
+      - private_subnet_cidr_block
+      - create_bastion
+      - bastion_client_cidr
+      - bastion_max_session_ttl_seconds
+
+  - title: OpenClaw Runtime
+    variables:
+      - openclaw_repo_url
+      - acos_repo_url
+      - hostname_label
+      - gateway_bind
+      - gateway_port
+      - openclaw_gateway_token
+
+  - title: OCI GenAI (Optional)
+    variables:
+      - oci_openai_base_url
+      - oci_openai_model_id
+      - oci_genai_api_key
+      - vault_secret_ocid
+
+  - title: IAM (Optional)
+    variables:
+      - create_iam_resources
+      - dynamic_group_name
+      - policy_name
+
+variables:
+  tenancy_ocid:
+    type: string
+    required: true
+    visible: false
+
+  region:
+    type: oci:identity:region:name
+    required: true
+    visible: false
+
+  compartment_ocid:
+    type: oci:identity:compartment:id
+    required: true
+    title: Deployment Compartment
+    default: compartment_ocid
+
+  ssh_public_key:
+    type: oci:core:ssh:publickey
+    required: true
+    title: SSH Public Key
+
+  stack_prefix:
+    type: string
+    required: true
+    default: openclaw
+    title: Resource Prefix
+
+  availability_domain_number:
+    type: integer
+    required: true
+    default: 1
+    title: Availability Domain Number
+
+  image_ocid:
+    type: string
+    required: false
+    default: ""
+    title: Custom Image OCID (Optional)
+
+  instance_shape:
+    type: string
+    required: true
+    default: VM.Standard.E4.Flex
+    title: Compute Shape
+
+  instance_ocpus:
+    type: number
+    required: true
+    default: 1
+    title: Flex Shape OCPUs
+
+  instance_memory_in_gbs:
+    type: number
+    required: true
+    default: 6
+    title: Flex Shape Memory (GB)
+
+  boot_volume_size_gbs:
+    type: number
+    required: true
+    default: 100
+    title: Boot Volume (GB)
+
+  vcn_cidr_block:
+    type: string
+    required: true
+    default: 10.0.0.0/16
+    title: VCN CIDR
+
+  public_subnet_cidr_block:
+    type: string
+    required: true
+    default: 10.0.0.0/24
+    title: Public Subnet CIDR
+
+  private_subnet_cidr_block:
+    type: string
+    required: true
+    default: 10.0.1.0/24
+    title: Private Subnet CIDR
+
+  create_bastion:
+    type: boolean
+    required: true
+    default: true
+    title: Create OCI Bastion
+
+  bastion_client_cidr:
+    type: string
+    required: true
+    default: 0.0.0.0/0
+    title: Bastion Client CIDR
+
+  bastion_max_session_ttl_seconds:
+    type: integer
+    required: true
+    default: 10800
+    title: Bastion Session TTL (seconds)
+
+  openclaw_repo_url:
+    type: string
+    required: true
+    default: https://github.com/openclaw/openclaw.git
+    title: OpenClaw Repository URL
+
+  acos_repo_url:
+    type: string
+    required: false
+    default: ""
+    title: ACOS Repository URL (Optional)
+
+  hostname_label:
+    type: string
+    required: true
+    default: openclaw
+    title: Private Hostname Label
+
+  gateway_bind:
+    type: string
+    required: true
+    default: lan
+    title: OpenClaw Gateway Bind
+
+  gateway_port:
+    type: integer
+    required: true
+    default: 18789
+    title: OpenClaw Gateway Port
+
+  openclaw_gateway_token:
+    type: string
+    required: false
+    default: ""
+    title: OpenClaw Gateway Token (Optional)
+
+  oci_openai_base_url:
+    type: string
+    required: false
+    default: ""
+    title: OCI OpenAI-Compatible Base URL (Optional)
+
+  oci_openai_model_id:
+    type: string
+    required: false
+    default: ""
+    title: OCI Model ID (Optional)
+
+  oci_genai_api_key:
+    type: string
+    required: false
+    default: ""
+    title: OCI GenAI API Key (Optional)
+
+  vault_secret_ocid:
+    type: string
+    required: false
+    default: ""
+    title: Vault Secret OCID (Optional)
+
+  create_iam_resources:
+    type: boolean
+    required: true
+    default: false
+    title: Create Dynamic Group + Policy
+
+  dynamic_group_name:
+    type: string
+    required: true
+    default: openclaw-instances
+    title: Dynamic Group Name
+
+  policy_name:
+    type: string
+    required: true
+    default: openclaw-policy
+    title: IAM Policy Name
