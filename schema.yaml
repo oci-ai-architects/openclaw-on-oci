@@ -1,6 +1,9 @@
+---
 title: OpenClaw on OCI
 
-description: Deploy OpenClaw on Oracle Cloud Infrastructure with Podman-first runtime, private networking, and optional OCI Bastion + IAM integration.
+description: >-
+  Deploy OpenClaw on Oracle Cloud Infrastructure with Podman-first runtime,
+  private networking, and optional OCI Bastion + IAM integration.
 
 schemaVersion: 1.1.0
 version: "20260219"
@@ -103,13 +106,13 @@ variables:
     title: Compute Shape
 
   instance_ocpus:
-    type: number
+    type: integer
     required: true
     default: 1
     title: Flex Shape OCPUs
 
   instance_memory_in_gbs:
-    type: number
+    type: integer
     required: true
     default: 6
     title: Flex Shape Memory (GB)

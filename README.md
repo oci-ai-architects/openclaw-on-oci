@@ -4,7 +4,7 @@ Deploy OpenClaw on OCI with a Podman-first runtime, private networking, OCI Bast
 
 ## Deploy Button
 
-[![Deploy to Oracle Cloud](https://oci-resourcemanager-plugin.plugins.oci.oraclecloud.com/latest/deploy-to-oracle-cloud.svg)](https://cloud.oracle.com/resourcemanager/stacks/create?zipUrl=https://github.com/oci-ai-architects/openclaw-on-oci/archive/refs/heads/main.zip)
+[![Deploy to Oracle Cloud](https://oci-resourcemanager-plugin.plugins.oci.oraclecloud.com/latest/deploy-to-oracle-cloud.svg)](https://cloud.oracle.com/resourcemanager/stacks/create?zipUrl=https://github.com/oci-ai-architects/openclaw-on-oci/releases/download/v0.2.0/openclaw-on-oci-stack.zip)
 
 `Deploy to Oracle Cloud` uses OCI Resource Manager with the Terraform stack in this repository.
 

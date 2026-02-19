@@ -163,15 +163,15 @@ resource "oci_core_instance" "openclaw" {
   metadata = {
     ssh_authorized_keys = var.ssh_public_key
     user_data = base64encode(templatefile("${path.module}/cloud-init.tftpl", {
-      openclaw_repo_url      = var.openclaw_repo_url
-      acos_repo_url          = var.acos_repo_url
-      gateway_token          = local.effective_gateway_key
-      gateway_bind           = var.gateway_bind
-      gateway_port           = var.gateway_port
-      oci_openai_base_url    = var.oci_openai_base_url
-      oci_openai_model_id    = var.oci_openai_model_id
-      oci_genai_api_key_b64  = base64encode(var.oci_genai_api_key)
-      vault_secret_ocid      = var.vault_secret_ocid
+      openclaw_repo_url     = var.openclaw_repo_url
+      acos_repo_url         = var.acos_repo_url
+      gateway_token         = local.effective_gateway_key
+      gateway_bind          = var.gateway_bind
+      gateway_port          = var.gateway_port
+      oci_openai_base_url   = var.oci_openai_base_url
+      oci_openai_model_id   = var.oci_openai_model_id
+      oci_genai_api_key_b64 = base64encode(var.oci_genai_api_key)
+      vault_secret_ocid     = var.vault_secret_ocid
     }))
   }
 }

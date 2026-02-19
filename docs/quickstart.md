@@ -13,7 +13,7 @@ Official reference for OCI OpenAI-compatible endpoint + key:
 
 Use the deploy button in `README.md` or open:
 
-`https://cloud.oracle.com/resourcemanager/stacks/create?zipUrl=https://github.com/oci-ai-architects/openclaw-on-oci/archive/refs/heads/main.zip`
+`https://cloud.oracle.com/resourcemanager/stacks/create?zipUrl=https://github.com/oci-ai-architects/openclaw-on-oci/releases/download/v0.2.0/openclaw-on-oci-stack.zip`
 
 Then set at minimum:
 

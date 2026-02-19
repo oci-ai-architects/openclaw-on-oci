@@ -31,7 +31,7 @@ write_files:
       export DEBIAN_FRONTEND=noninteractive
 
       if [[ ! -d /opt/openclaw ]]; then
-        git clone --depth 1 "${OPENCLAW_REPO_URL}" /opt/openclaw
+        git clone --depth 1 "$OPENCLAW_REPO_URL" /opt/openclaw
       fi
 
       cd /opt/openclaw
@@ -40,52 +40,52 @@ write_files:
       install -d -m 700 -o openclaw -g openclaw /home/openclaw/.openclaw
       install -d -m 700 -o openclaw -g openclaw /home/openclaw/.openclaw/workspace
 
-      if [[ -n "${ACOS_REPO_URL}" && ! -d /home/openclaw/.openclaw/workspace/acos ]]; then
-        sudo -u openclaw git clone --depth 1 "${ACOS_REPO_URL}" /home/openclaw/.openclaw/workspace/acos || true
+      if [[ -n "$ACOS_REPO_URL" && ! -d /home/openclaw/.openclaw/workspace/acos ]]; then
+        sudo -u openclaw git clone --depth 1 "$ACOS_REPO_URL" /home/openclaw/.openclaw/workspace/acos || true
       fi
 
-      if [[ -n "${VAULT_SECRET_OCID}" ]]; then
+      if [[ -n "$VAULT_SECRET_OCID" ]]; then
         if ! command -v oci >/dev/null 2>&1; then
           bash -c "$(curl -L https://raw.githubusercontent.com/oracle/oci-cli/master/scripts/install/install.sh)" -- --accept-all-defaults
         fi
         OCI_BIN="$(command -v oci || true)"
-        if [[ -z "${OCI_BIN}" && -x /root/bin/oci ]]; then
+        if [[ -z "$OCI_BIN" && -x /root/bin/oci ]]; then
           OCI_BIN="/root/bin/oci"
         fi
         set +e
-        VAULT_KEY_RAW="$("${OCI_BIN}" secrets secret-bundle get \
-          --secret-id "${VAULT_SECRET_OCID}" \
+        VAULT_KEY_RAW="$("$OCI_BIN" secrets secret-bundle get \
+          --secret-id "$VAULT_SECRET_OCID" \
           --auth instance_principal \
           --query 'data."secret-bundle-content".content' \
           --raw-output 2>/tmp/openclaw-vault.err)"
         VAULT_RC=$?
         set -e
-        if [[ ${VAULT_RC} -eq 0 && -n "${VAULT_KEY_RAW}" ]]; then
-          OCI_GENAI_API_KEY="$(printf '%s' "${VAULT_KEY_RAW}" | base64 -d)"
+        if [[ $VAULT_RC -eq 0 && -n "$VAULT_KEY_RAW" ]]; then
+          OCI_GENAI_API_KEY="$(printf '%s' "$VAULT_KEY_RAW" | base64 -d)"
         fi
       fi
 
       cat > /home/openclaw/.openclaw/.env <<ENVFILE
-      OPENCLAW_GATEWAY_TOKEN=${OPENCLAW_GATEWAY_TOKEN}
-      OPENCLAW_GATEWAY_BIND=${OPENCLAW_GATEWAY_BIND}
-      OPENCLAW_GATEWAY_PORT=${OPENCLAW_GATEWAY_PORT}
-      OPENCLAW_OCI_OPENAI_BASE_URL=${OCI_OPENAI_BASE_URL}
-      OPENCLAW_OCI_OPENAI_MODEL_ID=${OCI_OPENAI_MODEL_ID}
-      OPENCLAW_OCI_GENAI_KEY=${OCI_GENAI_API_KEY}
+      OPENCLAW_GATEWAY_TOKEN=$OPENCLAW_GATEWAY_TOKEN
+      OPENCLAW_GATEWAY_BIND=$OPENCLAW_GATEWAY_BIND
+      OPENCLAW_GATEWAY_PORT=$OPENCLAW_GATEWAY_PORT
+      OPENCLAW_OCI_OPENAI_BASE_URL=$OCI_OPENAI_BASE_URL
+      OPENCLAW_OCI_OPENAI_MODEL_ID=$OCI_OPENAI_MODEL_ID
+      OPENCLAW_OCI_GENAI_KEY=$OCI_GENAI_API_KEY
       ENVFILE
 
       chown openclaw:openclaw /home/openclaw/.openclaw/.env
       chmod 600 /home/openclaw/.openclaw/.env
 
-      if [[ -n "${OCI_OPENAI_BASE_URL}" && -n "${OCI_OPENAI_MODEL_ID}" && -n "${OCI_GENAI_API_KEY}" ]]; then
-        cat > /home/openclaw/.openclaw/openclaw.json <<'CONFIGEOF'
+      if [[ -n "$OCI_OPENAI_BASE_URL" && -n "$OCI_OPENAI_MODEL_ID" && -n "$OCI_GENAI_API_KEY" ]]; then
+        cat > /home/openclaw/.openclaw/openclaw.json <<CONFIGEOF
         {
           gateway: { mode: "local" },
           agents: {
             defaults: {
-              model: { primary: "oci-genai/${OPENCLAW_OCI_OPENAI_MODEL_ID}" },
+              model: { primary: "oci-genai/$OPENCLAW_OCI_OPENAI_MODEL_ID" },
               models: {
-                "oci-genai/${OPENCLAW_OCI_OPENAI_MODEL_ID}": { alias: "OCI GenAI" }
+                "oci-genai/$OPENCLAW_OCI_OPENAI_MODEL_ID": { alias: "OCI GenAI" }
               }
             }
           },
@@ -93,12 +93,12 @@ write_files:
             mode: "merge",
             providers: {
               "oci-genai": {
-                baseUrl: "${OPENCLAW_OCI_OPENAI_BASE_URL}",
-                apiKey: "${OPENCLAW_OCI_GENAI_KEY}",
+                baseUrl: "$OPENCLAW_OCI_OPENAI_BASE_URL",
+                apiKey: "$OPENCLAW_OCI_GENAI_KEY",
                 api: "openai-completions",
                 models: [
                   {
-                    id: "${OPENCLAW_OCI_OPENAI_MODEL_ID}",
+                    id: "$OPENCLAW_OCI_OPENAI_MODEL_ID",
                     name: "OCI GenAI",
                     reasoning: false,
                     input: ["text"],
