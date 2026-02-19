@@ -56,6 +56,15 @@ Detailed guide:
 - `schema.yaml`: OCI Resource Manager form schema
 - `docs/`: runbooks and setup guides
 - `scripts/package-stack.sh`: zip stack for release distribution
+- `scripts/validate.sh`: local validation (terraform + lint + package smoke test)
+
+## Validation
+
+Run:
+
+```bash
+./scripts/validate.sh
+```
 
 ## Notes
 
