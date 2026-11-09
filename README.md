@@ -1,5 +1,9 @@
 # openclaw-on-oci
 
+License: Apache-2.0. See LICENSE.
+
+Oracle and OCI are trademarks or registered trademarks of Oracle Corporation. This project is not affiliated with, endorsed by, or sponsored by Oracle Corporation. Other names are marks of their respective owners.
+
 Deploy OpenClaw on OCI with a Podman-first runtime, private networking, OCI Bastion access, and optional OCI GenAI integration.
 
 ## Deploy Button
